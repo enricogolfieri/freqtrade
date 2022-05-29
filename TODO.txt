@@ -1,0 +1,9 @@
+1) start discarding bad strategy, ideally we stay with max 3/4 strategies. 
+    - they should be strategy you can hyperopt
+2) hyperopt them 
+3) make a bulktest where you can test them all in one hit over several period 
+    - select a test name 
+4) make a strategy that is able to detect trand (side,up,down)
+    - select the proper hyperopted strategy according to which one performed better in which period 
+
+5) now take a look a mgm and see if you can integrate in this framework 

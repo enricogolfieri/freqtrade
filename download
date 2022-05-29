@@ -1,0 +1,32 @@
+#!/bin/bash 
+
+__volume='user_data'
+
+__parse_args()
+	[[ -z ${__parsed_args} ]] && __parsed_args=true || return 0;
+
+
+    __cmd_make_dir=;
+	__file_dir="$__volume/data/binance/pairs.json";
+    __exchange="binance";
+	__args=();
+
+	while [[ $# -gt 0 ]]; do
+		case $1 in
+			--echo)
+				__cmd_prefix=echo;
+				shift
+			;;
+			--binance)
+				__config="$__volume/data/binance/pairs.json";
+				shift
+			;;
+			*)
+				__args+=($1);
+				shift
+			;;
+		esac;
+	done;
+
+__parse_args $@
+$__cmd_prefix docker-compose run --rm freqtrade download-data --exchange $__exchange --pairs-file $__file_dir ${__args[@]}
