@@ -1,3 +1,45 @@
+# THIS IS A FORK - MY DOC
+This is my fork of freqtrade 
+
+
+# Download 
+We simplify the bot by using only binance as a data provider
+You can download data for the past 2 years using 
+```
+./bulk-download
+```
+this will download data for {15m,1h,4h,12h}
+
+You can add any extra argument provided by freqtrade download-data
+
+## backtest
+
+For backtesting we can use the backtest.sh script 
+inside config folder, you can find several config files:
+  - basic.json sets configuration for every strategy
+  - godstra.json sets configuration for strategy GodStra 
+  - heracles.json sets configuration for strategy Heracles 
+
+backtest will automatically select the correct configuration file according to the strategy you run 
+
+```
+usage: backtest
+    	--echo : will print the command instead of running it, good for debugging
+
+			--strategy:   type name of the strategy without .py
+			--uptrend:    run backtest on period 16/05/21 to 18/11/21, based on bitcoin graph
+			--downtrend:  run backtest on period 18/11/21 to 16/05/22, based on bitcoin graph
+			--up :        need to check
+			--down :      need to check
+			--side:       need to check
+			--mm2021:     run backtest on period 16/05/21 to 16/05/22 
+      supports any other argument provided by freqtrade backtesting
+```
+
+## bulk-backtest
+working in progress
+
+# ORIGINAL DOC
 # ![freqtrade](https://raw.githubusercontent.com/freqtrade/freqtrade/develop/docs/assets/freqtrade_poweredby.svg)
 
 [![Freqtrade CI](https://github.com/freqtrade/freqtrade/workflows/Freqtrade%20CI/badge.svg)](https://github.com/freqtrade/freqtrade/actions/)
@@ -76,46 +118,6 @@ Please find the complete documentation on the [freqtrade website](https://www.fr
 Please refer to the [Docker Quickstart documentation](https://www.freqtrade.io/en/stable/docker_quickstart/) on how to get started quickly.
 
 For further (native) installation methods, please refer to the [Installation documentation page](https://www.freqtrade.io/en/stable/installation/).
-
-## Enrico Golfieri added usage
-
-# Download 
-We simplify the bot by using only binance as a data provider
-You can download data for the past 2 years using 
-```
-./bulk-download
-```
-this will download data for {15m,1h,4h,12h}
-
-You can add any extra argument provided by freqtrade download-data
-
-# backtest
-
-For backtesting we can use the backtest.sh script 
-inside config folder, you can find several config files:
-  - basic.json sets configuration for every strategy
-  - godstra.json sets configuration for strategy GodStra 
-  - heracles.json sets configuration for strategy Heracles 
-
-backtest will automatically select the correct configuration file according to the strategy you run 
-
-```
-usage: backtest
-    	--echo : will print the command instead of running it, good for debugging
-
-			--strategy:   type name of the strategy without .py
-			--uptrend:    run backtest on period 16/05/21 to 18/11/21, based on bitcoin graph
-			--downtrend:  run backtest on period 18/11/21 to 16/05/22, based on bitcoin graph
-			--up :        need to check
-			--down :      need to check
-			--side:       need to check
-			--mm2021:     run backtest on period 16/05/21 to 16/05/22 
-      supports any other argument provided by freqtrade backtesting
-```
-
-# bulk-backtest
-working in progress
-
 
 ## Basic Usage
 

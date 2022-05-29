@@ -1,3 +1,4 @@
+
 1) start discarding bad strategy, ideally we stay with max 3/4 strategies. 
     - they should be strategy you can hyperopt
 2) hyperopt them 

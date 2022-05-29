@@ -29,4 +29,4 @@ __parse_args()
 	done;
 
 __parse_args $@
-$__cmd_prefix docker-compose run --rm freqtrade download-data --exchange $__exchange --pairs-file $__file_dir ${__args[@]}
+$__cmd_prefix freqtrade download-data --exchange $__exchange --pairs-file $__file_dir ${__args[@]}
