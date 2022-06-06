@@ -1,5 +1,6 @@
 #!/bin/bash
 
+./download --days 720 -t 5m $@;
 ./download --days 720 -t 15m $@;
 ./download --days 720 -t 1h  $@;
 ./download --days 720 -t 4h  $@;
