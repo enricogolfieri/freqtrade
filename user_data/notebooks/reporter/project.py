@@ -10,57 +10,83 @@ from datetime import datetime
 __curr_dir=pathlib.Path(__file__).parent.resolve()
 
 
-def userdata():
-    return __curr_dir.parent.parent.resolve()
+def userdata(sub=None):
+    if sub:
+        return __curr_dir.parent.parent.joinpath(sub).resolve()
+    else:
+        return __curr_dir.parent.parent.resolve()
 
-def userdata(sub):
-    return __curr_dir.parent.parent.joinpath(sub).resolve()
-
-def notebooks(subdir,filename = None):
-    path = userdata('notebooks').joinpath(subdir).resolve()
+def __compose_sub_userdata(mainfolder,subfolder=None,filename = None):
+    
+    if subfolder:
+        path = userdata(mainfolder).joinpath(subfolder).resolve()
+    else:
+        path =  userdata(mainfolder).resolve()      
     if not os.path.exists(path):
         os.mkdir(path)
 
     if filename:
+        print(f"about to save {path.joinpath(filename).resolve()}")
         return path.joinpath(filename).resolve()
     else:
         return path
 
-def backtest_results(subdir,filename = None):
-    path = userdata('backtest_results').joinpath(subdir).resolve()
-    if not os.path.exists(path):
-        os.mkdir(path)
+def notebooks(subdir = None ,filename = None):
+    return __compose_sub_userdata("notebooks",subdir,filename)
 
-    if filename:
-        return path.joinpath(filename).resolve()
-    else:
-        return path
 
-def backtest_reports(subdir,filename = None):
+def backtest_results(subdir=None,filename = None):
+    return __compose_sub_userdata("backtest_results",subdir,filename)
 
-    path = userdata('backtest_reports').joinpath(subdir).resolve()
-    if not os.path.exists(path):
-        os.mkdir(path)
 
-    if filename:
-        return path.joinpath(filename).resolve()
-    else:
-        return path
+def backtest_reports(subdir=None,filename = None):
+    return __compose_sub_userdata("backtest_reports",subdir,filename)
 
-logger = logging.getLogger()
+
+logger = logging.getLogger('reporter-logger')
 
 def init_log(enable):
+    global logger
+    if enable:
+        #init logging
+        logfile =  "csv_report.log"
 
-    #init logging
-    logfile =  datetime.now().strftime('mylogfile_%H_%M_%d_%m_%Y.log')
+        handler = logging.handlers.WatchedFileHandler(
+        os.environ.get("LOGFILE", notebooks('logs').joinpath(logfile)), mode='w')
 
-    handler = logging.handlers.WatchedFileHandler(
-    os.environ.get("LOGFILE", notebooks('logs').joinpath(logfile)))
+        formatter = logging.Formatter(logging.BASIC_FORMAT)
 
-    formatter = logging.Formatter(logging.BASIC_FORMAT)
+        handler.setFormatter(formatter)
+        
+        logger.setLevel(os.environ.get("LOGLEVEL", "INFO"))
+        logger.addHandler(handler)
+        logger.disabled = False
+        logger.info(f"log enabled {enable}")
+    else:
+        logger.disabled = True 
 
-    handler.setFormatter(formatter)
 
-    logger.setLevel(os.environ.get("LOGLEVEL", "INFO"))
-    logger.addHandler(handler)
-    logger.propagate = enable
+import functools
+
+def logdebug(func):
+    """Print the function signature and return value"""
+    @functools.wraps(func)
+    def wrapper_debug(*args, **kwargs):
+        args_repr = [repr(a) for a in args]                      # 1
+        kwargs_repr = [f"{k}={v!r}" for k, v in kwargs.items()]  # 2
+        signature = ", ".join(args_repr + kwargs_repr)           # 3
+        logger.info(f"Calling {func.__name__}({signature})")
+        value = func(*args, **kwargs)
+        logger.info(f"{func.__name__!r} returned {value!r}")           # 4
+        return value
+    return wrapper_debug
+
+def exception(log_id):
+    def inner(func):
+        def wrapper(*args, **kwargs):
+            try:
+                func(*args,**kwargs)
+            except Exception as e:
+                logger.error(f"{log_id} - exception {e}")
+        return wrapper
+    return inner 
