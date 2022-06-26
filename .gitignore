@@ -7,7 +7,7 @@ logfile.txt
 user_data/backtest_results/*
 user_data/backtest_reports/*
 
-user_data/data/*
+user_data/data/binance/*
 freqtrade-plot.html
 freqtrade-profit-plot.html
 freqtrade/rpc/api_server/ui/*
@@ -100,5 +100,4 @@ target/
 
 #exceptions
 !*.gitkeep
-!user_data/data/binance/pairs.json
-
+!/user_data/data/binance/pairs.json
