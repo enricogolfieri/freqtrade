@@ -51,30 +51,16 @@ function updateenv() {
     echo "pip install in-progress. Please wait..."
     ${PYTHON} -m pip install --upgrade pip
 
-    dev=false
-    if [[ $REPLY =~ ^[Yy]$ ]]
-    then
-        REQUIREMENTS=requirements-dev.txt
-    else
-        REQUIREMENTS=requirements.txt
-    fi
+
+    REQUIREMENTS=requirements.txt
     REQUIREMENTS_HYPEROPT=""
-    REQUIREMENTS_PLOT=""
-     read -p "Do you want to install plotting dependencies (plotly) [y/N]? "
-    if [[ $REPLY =~ ^[Yy]$ ]]
-    then
-        REQUIREMENTS_PLOT="-r requirements-plot.txt"
-    fi
+    REQUIREMENTS_PLOT="-r requirements-plot.txt"
+
     if [ "${SYS_ARCH}" == "armv7l" ] || [ "${SYS_ARCH}" == "armv6l" ]; then
         echo "Detected Raspberry, installing cython, skipping hyperopt installation."
         ${PYTHON} -m pip install --upgrade cython
     else
-        # Is not Raspberry
-        read -p "Do you want to install hyperopt dependencies [y/N]? "
-        if [[ $REPLY =~ ^[Yy]$ ]]
-        then
-            REQUIREMENTS_HYPEROPT="-r requirements-hyperopt.txt"
-        fi
+        REQUIREMENTS_HYPEROPT="-r requirements-hyperopt.txt"
     fi
 
     ${PYTHON} -m pip install --upgrade -r ${REQUIREMENTS} ${REQUIREMENTS_HYPEROPT} ${REQUIREMENTS_PLOT}
